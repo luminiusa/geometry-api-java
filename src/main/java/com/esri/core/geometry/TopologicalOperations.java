@@ -1525,32 +1525,46 @@ final class TopologicalOperations {
 	static Geometry normalizeResult_(Geometry geomRes, Geometry geom_a,
 			Geometry dummy, char op) {
 		// assert(strchr("-&^|",op) != NULL);
+		CoverageHandler.setTarget(CoverageHandler.TopologicalOperations_normalizeResult);
+		CoverageHandler.update(0);
 		Geometry.Type gtRes = geomRes.getType();
 		if (gtRes == Geometry.Type.Envelope) {
+			CoverageHandler.update(1);
 			Polygon poly = new Polygon(geomRes.getDescription());
-			if (!geomRes.isEmpty())
+			if (!geomRes.isEmpty()) {
+				CoverageHandler.update(2);
 				poly.addEnvelope((Envelope) geomRes, false);
+			}
 			return poly;
 		}
 
 		if (gtRes == Geometry.Type.Point && (op == '|' || op == '^')) {
+			CoverageHandler.update(3);
 			MultiPoint poly = new MultiPoint(geomRes.getDescription());
-			if (!geomRes.isEmpty())
+			if (!geomRes.isEmpty()) {
+				CoverageHandler.update(4);
 				poly.add((Point) geomRes);
+			}
 			return poly;
 		}
 
 		if (gtRes == Geometry.Type.Line) {
+			CoverageHandler.update(5);
 			Polyline poly = new Polyline(geomRes.getDescription());
-			if (!geomRes.isEmpty())
+			if (!geomRes.isEmpty()) {
+				CoverageHandler.update(6);
 				poly.addSegment((Segment) geomRes, true);
+			}
 			return poly;
 		}
 
 		if (gtRes == Geometry.Type.Point && op == '-') {
+			CoverageHandler.update(7);
 			if (geom_a.getType() == Geometry.Type.Point) {
+				CoverageHandler.update(8);
 				Point pt = new Point(geomRes.getDescription());
 				if (!geomRes.isEmpty()) {
+					CoverageHandler.update(9);
 					assert (((MultiPoint) geomRes).getPointCount() == 1);
 					((MultiPoint) geomRes).getPointByVal(0, pt);
 				}
@@ -1559,9 +1573,12 @@ final class TopologicalOperations {
 		}
 
 		if (gtRes == Geometry.Type.MultiPoint && op == '&') {
+			CoverageHandler.update(10);
 			if (geom_a.getType() == Geometry.Type.Point) {
+				CoverageHandler.update(11);
 				Point pt = new Point(geomRes.getDescription());
 				if (!geomRes.isEmpty()) {
+					CoverageHandler.update(12);
 					assert (((MultiPoint) geomRes).getPointCount() == 1);
 					((MultiPoint) geomRes).getPointByVal(0, pt);
 				}

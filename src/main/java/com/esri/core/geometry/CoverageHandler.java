@@ -7,14 +7,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class CoverageHandler {
-    public static final boolean[] MultiPathImpl_addSegmentsFromPath;
-    public static final boolean[] MultiPathImpl_insertPoints;
+    public static final boolean[] MultiPathImpl_addSegmentsFromPath = new boolean[16];
+    public static final boolean[] MultiPathImpl_insertPoints = new boolean[16];
+    public static final boolean[] TopologicalOperations_normalizeResult = new boolean[13];
     private static boolean[] target = null;
-    
-    static {
-        MultiPathImpl_addSegmentsFromPath = new boolean[16];
-        MultiPathImpl_insertPoints = new boolean[16];
-    }
     
     public static void setTarget(boolean[] target) {
         CoverageHandler.target = target;
@@ -28,8 +24,10 @@ public class CoverageHandler {
     }
     
     private static void log() {
+        System.out.println("-----------------------");
         logHelper("MultiPathImpl::addSegmentsFromPath", MultiPathImpl_addSegmentsFromPath);
         logHelper("MultiPathImpl::insertPoints", MultiPathImpl_insertPoints);
+        logHelper("TopologicalOperations::normalizeResult", TopologicalOperations_normalizeResult);
     }
     
     private static void logHelper(String s, boolean[] toPrint) {

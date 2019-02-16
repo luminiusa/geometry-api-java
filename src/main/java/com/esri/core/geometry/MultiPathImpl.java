@@ -697,32 +697,28 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 	public void addSegmentsFromPath(MultiPathImpl src, int src_path_index,
 			int src_segment_from, int src_segment_count,
 			boolean b_start_new_path) {
-        //0
-		CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 0);
+		CoverageHandler.setTarget(CoverageHandler.MultiPathImpl_addSegmentsFromPath);
+		CoverageHandler.update(0);
 		
-		if (!b_start_new_path && getPathCount() == 0) {   
-            //1
-			CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 1);
+		if (!b_start_new_path && getPathCount() == 0) {
+			CoverageHandler.update(1);
 			b_start_new_path = true;
         }
 
-		if (src_path_index < 0) {   
-            //2
-			CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 2);
+		if (src_path_index < 0) {
+			CoverageHandler.update(2);
 			src_path_index = src.getPathCount() - 1;
         }
 
 		if (src_path_index >= src.getPathCount() || src_segment_from < 0
 				|| src_segment_count < 0
 				|| src_segment_count > src.getSegmentCount(src_path_index)) {
-            //3
-			CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 3);
+            CoverageHandler.update(3);
 			throw new GeometryException("index out of bounds");
         }
 
 		if (src_segment_count == 0) {
-            //4
-			CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 4);
+            CoverageHandler.update(4);
 			return;
         }
 
@@ -731,8 +727,7 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 						.getSegmentCount(src_path_index);
 
 		if (bIncludesClosingSegment && src_segment_count == 1) {
-            // 5
-			CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 5);
+            CoverageHandler.update(5);
 			return;// cannot add a closing segment alone.
         }
 
@@ -744,15 +739,13 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 				+ 1;
 		if (b_start_new_path)// adding a new path.
 		{
-            //6
-			CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 6);
+            CoverageHandler.update(6);
 			src_point_count++;// add start point.
 			srcFromPoint--;
 		}
 
 		if (bIncludesClosingSegment) {
-            //7
-			CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 7);
+            CoverageHandler.update(7);
 			src_point_count--;
 		}
 
@@ -761,11 +754,9 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 		_verifyAllStreams();
 
 		if (b_start_new_path) {
-            // 8
-			CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 8);
+			CoverageHandler.update(8);
 			if (src_point_count == 0) {
-                //9
-				CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 9);
+                CoverageHandler.update(9);
 				return;// happens when adding a single closing segment to the
 						// new path
             }
@@ -776,24 +767,21 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 			flags &= ~(byte) PathFlags.enumCalcMask;// remove calculated flags
 
 			if (m_bPolygon) {
-                //10
-				CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 10);
+                CoverageHandler.update(10);
 				flags |= (byte) PathFlags.enumClosed;
             }
 
 			m_pathFlags.write(m_pathFlags.size() - 1, flags);
 			m_pathFlags.add((byte) 0);
 		} else {
-            //11
-			CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 11);
+            CoverageHandler.update(11);
 			m_paths.write(m_pathFlags.size() - 1, m_pointCount);
 		}
 
 		// Index_type absoluteIndex = pathStart + before_point_index;
 
 		for (int iattr = 0, nattr = m_description.getAttributeCount(); iattr < nattr; iattr++) {
-            //12
-			CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 12);
+            CoverageHandler.update(12);
 			int semantics = m_description.getSemantics(iattr);
 			int comp = VertexDescription.getComponentCount(semantics);
 
@@ -808,8 +796,7 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 																			// insert
 																			// default
 																			// value
-				//13
-				CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 13);
+				CoverageHandler.update(13);
                 double v = VertexDescription.getDefaultValue(semantics);
 				m_vertexAttributes[iattr].insertRange(comp * oldPointCount, v,
 						src_point_count * comp, comp * oldPointCount);
@@ -825,8 +812,7 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 		}
 
 		if (hasNonLinearSegments()) {
-			//14
-			CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 14);
+			CoverageHandler.update(14);
 			// TODO: implement me. For example as a while loop over all curves.
 			// Replace, calling ReplaceSegment
 			throw GeometryException.GeometryInternalError();
@@ -851,8 +837,7 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 		}
 
 		if (src.hasNonLinearSegments(src_path_index)) {
-			//15
-			CoverageHandler.update("MultiPathImpl::addSegmentsFromPath", 15);
+			CoverageHandler.update(15);
 			// TODO: implement me. For example as a while loop over all curves.
 			// Replace, calling ReplaceSegment
 			throw GeometryException.GeometryInternalError();
@@ -1119,38 +1104,55 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 	public void insertPoints(int pathIndex, int beforePointIndex,
 			MultiPathImpl src, int srcPathIndex, int srcPointIndexFrom,
 			int srcPointCount, boolean bForward) {
-		if (pathIndex < 0)
+		CoverageHandler.setTarget(CoverageHandler.MultiPathImpl_insertPoints);
+		//CoverageHandler.update("MultiPathImpl::insertPoints", 0);
+		CoverageHandler.update(0);
+		if (pathIndex < 0) {
+			CoverageHandler.update(1);
 			pathIndex = getPathCount();
+		}
 
-		if (srcPathIndex < 0)
+		if (srcPathIndex < 0) {
+			CoverageHandler.update(2);
 			srcPathIndex = src.getPathCount() - 1;
+		}
 
 		if (pathIndex > getPathCount() || beforePointIndex >= 0
 				&& beforePointIndex > getPathSize(pathIndex)
 				|| srcPathIndex >= src.getPathCount()
-				|| srcPointCount > src.getPathSize(srcPathIndex))
+				|| srcPointCount > src.getPathSize(srcPathIndex)) {
+			CoverageHandler.update(3);
 			throw new GeometryException("index out of bounds");
+		}
 
-		if (srcPointCount == 0)
+		if (srcPointCount == 0) {
+			CoverageHandler.update(4);
 			return;
+		}
 
 		mergeVertexDescription(src.m_description);
 
 		if (pathIndex == getPathCount())// adding a new path.
 		{
+			CoverageHandler.update(5);
 			m_paths.add(m_pointCount);
 
 			byte flags = src.m_pathFlags.read(srcPathIndex);
 			flags &= ~(byte) PathFlags.enumCalcMask;// remove calculated flags
 
-			if (!m_bPolygon)
+			if (!m_bPolygon) {
+				CoverageHandler.update(6);
 				m_pathFlags.add(flags);
-			else
+			} else {
+				CoverageHandler.update(7);
 				m_pathFlags.add((byte) (flags | PathFlags.enumClosed));
+			}
 		}
 
-		if (beforePointIndex < 0)
+		if (beforePointIndex < 0) {
+			CoverageHandler.update(8);
 			beforePointIndex = getPathSize(pathIndex);
+		}
 
 		int oldPointCount = m_pointCount;
 		_resizeImpl(m_pointCount + srcPointCount);
@@ -1160,13 +1162,16 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 		int pathStart = getPathStart(pathIndex);
 		int absoluteIndex = pathStart + beforePointIndex;
 
-		if (srcPointCount < 0)
+		if (srcPointCount < 0) {
+			CoverageHandler.update(9);
 			srcPointCount = src.getPathSize(srcPathIndex);
+		}
 
 		int srcPathStart = src.getPathStart(srcPathIndex);
 		int srcAbsoluteIndex = srcPathStart + srcPointCount;
 
 		for (int iattr = 0, nattr = m_description.getAttributeCount(); iattr < nattr; iattr++) {
+			CoverageHandler.update(10);
 			int semantics = m_description._getSemanticsImpl(iattr);
 			int comp = VertexDescription.getComponentCount(semantics);
 
@@ -1179,6 +1184,7 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 																			// the
 																			// attribute.
 			{
+				CoverageHandler.update(11);
 				double v = VertexDescription.getDefaultValue(semantics);
 				m_vertexAttributes[iattr].insertRange(comp * absoluteIndex, v,
 						srcAbsoluteIndex * comp, comp * oldPointCount);
@@ -1195,6 +1201,7 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 
 		if (hasNonLinearSegments()) {// TODO: probably a bug here when a new
 										// path is added.
+			CoverageHandler.update(12);
 			m_segmentFlags.writeRange((getPathStart(pathIndex)
 					+ beforePointIndex + srcPointCount), (oldPointCount
 					- getPathStart(pathIndex) - beforePointIndex),
@@ -1207,18 +1214,21 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 					(getPathStart(pathIndex) + beforePointIndex), true, 1);
 			for (int i = getPathStart(pathIndex) + beforePointIndex, n = getPathStart(pathIndex)
 					+ beforePointIndex + srcPointCount; i < n; i++) {
+				CoverageHandler.update(13);
 				m_segmentFlags.write(i, (byte) SegmentFlags.enumLineSeg);
 				m_segmentParamIndex.write(i, -1);
 			}
 		}
 
 		if (src.hasNonLinearSegments(srcPathIndex)) {
+			CoverageHandler.update(14);			
 			// TODO: implement me. For example as a while loop over all curves.
 			// Replace, calling ReplaceSegment
 			throw GeometryException.GeometryInternalError();
 		}
 
 		for (int ipath = pathIndex + 1, npaths = getPathCount(); ipath <= npaths; ipath++) {
+			CoverageHandler.update(15);
 			int num = m_paths.read(ipath);
 			m_paths.write(ipath, num + srcPointCount);
 		}

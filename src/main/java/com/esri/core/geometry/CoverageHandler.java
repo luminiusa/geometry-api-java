@@ -7,33 +7,29 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class CoverageHandler {
-    public static final CoverageHandler c;
+    public static final boolean[] MultiPathImpl_addSegmentsFromPath;
+    public static final boolean[] MultiPathImpl_insertPoints;
+    private static boolean[] target = null;
     
     static {
-        c = new CoverageHandler();
-    }
-    
-    private boolean[] MultiPathImpl_addSegmentsFromPath;
-    
-    private CoverageHandler() {
         MultiPathImpl_addSegmentsFromPath = new boolean[16];
+        MultiPathImpl_insertPoints = new boolean[16];
     }
     
-    public static void update(String identifier, int instrumentID) {
-        boolean[] toUpdate = null;
-        if (identifier.equals("MultiPathImpl::addSegmentsFromPath")) {
-            toUpdate = c.MultiPathImpl_addSegmentsFromPath;
-        } else {
-            System.out.println("\n\nUNRECOGNIZED IDENTIFIER: " + identifier + "\n\n");
-        }
-        if (!toUpdate[instrumentID]) {
-            toUpdate[instrumentID] = true;
+    public static void setTarget(boolean[] target) {
+        CoverageHandler.target = target;
+    }
+    
+    public static void update(int instrumentID) {
+        if (!target[instrumentID]) {
+            target[instrumentID] = true;
             log();
         }
     }
     
     private static void log() {
-        logHelper("MultiPathImpl::addSegmentsFromPath", c.MultiPathImpl_addSegmentsFromPath);
+        logHelper("MultiPathImpl::addSegmentsFromPath", MultiPathImpl_addSegmentsFromPath);
+        logHelper("MultiPathImpl::insertPoints", MultiPathImpl_insertPoints);
     }
     
     private static void logHelper(String s, boolean[] toPrint) {

@@ -10,6 +10,8 @@ public class CoverageHandler {
     public static final boolean[] MultiPathImpl_addSegmentsFromPath = new boolean[16];
     public static final boolean[] MultiPathImpl_insertPoints = new boolean[16];
     public static final boolean[] TopologicalOperations_normalizeResult = new boolean[13];
+    public static final boolean[] AttributeStreamOfInt16_writeRange = new boolean[15];
+    
     private static boolean[] target = null;
     
     public static void setTarget(boolean[] target) {
@@ -25,13 +27,15 @@ public class CoverageHandler {
     
     private static void log() {
         System.out.println("-----------------------");
-        logHelper("MultiPathImpl::addSegmentsFromPath", MultiPathImpl_addSegmentsFromPath);
-        logHelper("MultiPathImpl::insertPoints", MultiPathImpl_insertPoints);
+        logHelper("MultiPathImpl::addSegmentsFromPath    ", MultiPathImpl_addSegmentsFromPath);
+        logHelper("MultiPathImpl::insertPoints           ", MultiPathImpl_insertPoints);
         logHelper("TopologicalOperations::normalizeResult", TopologicalOperations_normalizeResult);
+        logHelper("AttributeStreamOfInt16::writeRange    ", AttributeStreamOfInt16_writeRange);
+        System.out.println("-----------------------");        
     }
     
     private static void logHelper(String s, boolean[] toPrint) {
-        System.out.print(s + ":");
+        System.out.print(s);
         for (boolean b : toPrint) {
             System.out.print(" " + (b ? 1 : 0));
         }

@@ -469,51 +469,73 @@ final class AttributeStreamOfInt16 extends AttributeStreamBase {
 	@Override
 	public void writeRange(int startElement, int count,
 			AttributeStreamBase _src, int srcStart, boolean bForward, int stride) {
-		if (startElement < 0 || count < 0 || srcStart < 0)
+		CoverageHandler.setTarget(CoverageHandler.AttributeStreamOfInt16_writeRange);
+		CoverageHandler.update(0);
+		if (startElement < 0 || count < 0 || srcStart < 0) {
+			CoverageHandler.update(1);
 			throw new IllegalArgumentException();
+		}
 
-		if (!bForward && (stride <= 0 || (count % stride != 0)))
+		if (!bForward && (stride <= 0 || (count % stride != 0))) {
+			CoverageHandler.update(2);
 			throw new IllegalArgumentException();
+		}
 
 		AttributeStreamOfInt16 src = (AttributeStreamOfInt16) _src; // the input
 																	// type must
 																	// match
 
-		if (src.size() < (int) (srcStart + count))
+		if (src.size() < (int) (srcStart + count)) {
+			CoverageHandler.update(3);
 			throw new IllegalArgumentException();
+		}
 
-		if (count == 0)
+		if (count == 0) {
+			CoverageHandler.update(4);
 			return;
+		}
 
-		if (size() < count + startElement)
+		if (size() < count + startElement) {
+			CoverageHandler.update(5);
 			resize(count + startElement);
+		}
 
 		if (_src == (AttributeStreamBase) this) {
+			CoverageHandler.update(6);
 			_selfWriteRangeImpl(startElement, count, srcStart, bForward, stride);
 			return;
 		}
 
 		if (bForward) {
+			CoverageHandler.update(7);
 			int j = startElement;
 			int offset = srcStart;
 			for (int i = 0; i < count; i++) {
+				CoverageHandler.update(8);
 				m_buffer[j] = src.m_buffer[offset];
 				j++;
 				offset++;
 			}
 		} else {
+			CoverageHandler.update(9);
 			int j = startElement;
 			int offset = srcStart + count - stride;
 			if (stride == 1) {
+				CoverageHandler.update(10);
 				for (int i = 0; i < count; i++) {
+					CoverageHandler.update(11);
 					m_buffer[j] = src.m_buffer[offset];
 					j++;
 					offset--;
 				}
 			} else {
+				CoverageHandler.update(12);
 				for (int i = 0, n = count / stride; i < n; i++) {
-					for (int k = 0; k < stride; k++)
+					CoverageHandler.update(13);
+					for (int k = 0; k < stride; k++) {
+						CoverageHandler.update(14);
 						m_buffer[j + k] = src.m_buffer[offset + k];
+					}
 
 					j += stride;
 					offset -= stride;

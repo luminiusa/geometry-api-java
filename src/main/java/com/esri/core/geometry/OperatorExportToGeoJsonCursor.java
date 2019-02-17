@@ -176,20 +176,33 @@ class OperatorExportToGeoJsonCursor extends JsonCursor {
 
 	// Mirrors wkt
 	private static void exportPolygonToGeoJson_(int export_flags, Polygon polygon, JsonWriter json_writer) {
+		CoverageHandler.setTarget(CoverageHandler.OperatorExportToGeoJsonCursor_exportPolygonToGeoJson_);
+		CoverageHandler.update(0);
 		MultiPathImpl polygon_impl = (MultiPathImpl) (polygon._getImpl());
 
 		if ((export_flags & GeoJsonExportFlags.geoJsonExportFailIfNotSimple) != 0) {
+			CoverageHandler.update(1);
 			int simple = polygon_impl.getIsSimple(0.0);
 
-			if (simple != MultiPathImpl.GeometryXSimple.Strong)
+			if (simple != MultiPathImpl.GeometryXSimple.Strong) {
+				CoverageHandler.update(2);
 				throw new GeometryException("corrupted geometry");
+			} else {
+				CoverageHandler.update(3);
+			}
+		} else {
+			CoverageHandler.update(4);
 		}
 
 		int point_count = polygon.getPointCount();
 		int polygon_count = polygon_impl.getOGCPolygonCount();
 
-		if (point_count > 0 && polygon_count == 0)
+		if (point_count > 0 && polygon_count == 0) {
+			CoverageHandler.update(5);
 			throw new GeometryException("corrupted geometry");
+		} else {
+			CoverageHandler.update(6);
+		}
 
 		int precision = 17 - (31 & (export_flags >> 13));
 		boolean bFixedPoint = (GeoJsonExportFlags.geoJsonExportPrecisionFixedPoint & export_flags) != 0;
@@ -198,8 +211,12 @@ class OperatorExportToGeoJsonCursor extends JsonCursor {
 		boolean b_export_ms = polygon_impl.hasAttribute(VertexDescription.Semantics.M)
 				&& (export_flags & GeoJsonExportFlags.geoJsonExportStripMs) == 0;
 
-		if (!b_export_zs && b_export_ms)
+		if (!b_export_zs && b_export_ms) {
+			CoverageHandler.update(7);
 			throw new IllegalArgumentException("invalid argument");
+		} else {
+			CoverageHandler.update(8);
+		}
 
 		int path_count = 0;
 		AttributeStreamOfDbl position = null;
@@ -209,28 +226,46 @@ class OperatorExportToGeoJsonCursor extends JsonCursor {
 		AttributeStreamOfInt32 paths = null;
 
 		if (point_count > 0) {
+			CoverageHandler.update(9);
 			position = (AttributeStreamOfDbl) polygon_impl.getAttributeStreamRef(Semantics.POSITION);
 			path_flags = polygon_impl.getPathFlagsStreamRef();
 			paths = polygon_impl.getPathStreamRef();
 			path_count = polygon_impl.getPathCount();
 
 			if (b_export_zs) {
-				if (polygon_impl._attributeStreamIsAllocated(Semantics.Z))
+				CoverageHandler.update(10);
+				if (polygon_impl._attributeStreamIsAllocated(Semantics.Z)) {
+					CoverageHandler.update(11);
 					zs = (AttributeStreamOfDbl) polygon_impl.getAttributeStreamRef(Semantics.Z);
+				} else {
+					CoverageHandler.update(12);
+				}
+			} else {
+				CoverageHandler.update(13);
 			}
 
 			if (b_export_ms) {
-				if (polygon_impl._attributeStreamIsAllocated(Semantics.M))
+				CoverageHandler.update(14);
+				if (polygon_impl._attributeStreamIsAllocated(Semantics.M)) {
+					CoverageHandler.update(15);
 					ms = (AttributeStreamOfDbl) polygon_impl.getAttributeStreamRef(Semantics.M);
+				} else {
+					CoverageHandler.update(16);
+				}
+			} else {
+				CoverageHandler.update(17);
 			}
 		}
 
-		if ((export_flags & GeoJsonExportFlags.geoJsonExportPreferMultiGeometry) == 0 && polygon_count <= 1)
+		if ((export_flags & GeoJsonExportFlags.geoJsonExportPreferMultiGeometry) == 0 && polygon_count <= 1) {
+			CoverageHandler.update(18);
 			polygonTaggedText_(precision, bFixedPoint, b_export_zs, b_export_ms, zs, ms, position, paths, path_count,
 					json_writer);
-		else
+		} else {
+			CoverageHandler.update(19);
 			multiPolygonTaggedText_(precision, bFixedPoint, b_export_zs, b_export_ms, zs, ms, position, path_flags,
 					paths, polygon_count, path_count, json_writer);
+		}
 	}
 
 	// Mirrors wkt

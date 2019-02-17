@@ -598,61 +598,96 @@ class SweepComparator extends Treap.Comparator {
 
 	int compareSegments(int leftElm, int left_vertex, int right_elm,
 			int right_vertex) {
+		CoverageHandler.setTarget(CoverageHandler.SweepComparator_compareSegments);
+		CoverageHandler.update(0);
 		SimpleEdge edgeLeft = tryGetCachedEdge_(leftElm);
 		if (edgeLeft == null) {
-			if (m_vertex_1 == left_vertex)
+			CoverageHandler.update(1);
+			if (m_vertex_1 == left_vertex) {
+				CoverageHandler.update(2);
 				edgeLeft = m_temp_simple_edge_1;
-			else {
+			} else {
+				CoverageHandler.update(3);
 				m_vertex_1 = left_vertex;
 				edgeLeft = tryCreateCachedEdge_(leftElm);
 				if (edgeLeft == null) {
+					CoverageHandler.update(4);
 					edgeLeft = m_temp_simple_edge_1;
 					m_temp_simple_edge_1.m_value = leftElm;
+				} else {
+					CoverageHandler.update(5);
 				}
 				initSimpleEdge_(edgeLeft, left_vertex);
 			}
-		} else
+		} else {
+			CoverageHandler.update(6);
 			m_vertex_1 = left_vertex;
+		}
 
 		SimpleEdge edgeRight = tryGetCachedEdge_(right_elm);
 		if (edgeRight == null) {
-			if (m_vertex_2 == right_vertex)
+			CoverageHandler.update(7);
+			if (m_vertex_2 == right_vertex) {
+				CoverageHandler.update(8);
 				edgeRight = m_temp_simple_edge_2;
-			else {
+			} else {
+				CoverageHandler.update(9);
 				m_vertex_2 = right_vertex;
 				edgeRight = tryCreateCachedEdge_(right_elm);
 				if (edgeRight == null) {
+					CoverageHandler.update(10);
 					edgeRight = m_temp_simple_edge_2;
 					m_temp_simple_edge_2.m_value = right_elm;
+				} else {
+					CoverageHandler.update(11);
 				}
 				initSimpleEdge_(edgeRight, right_vertex);
 			}
-		} else
+		} else {
+			CoverageHandler.update(12);
 			m_vertex_2 = right_vertex;
+		}
 
-		if (edgeLeft.m_b_curve || edgeRight.m_b_curve)
+		if (edgeLeft.m_b_curve || edgeRight.m_b_curve) {
+			CoverageHandler.update(13);
 			return compareSegments_(left_vertex, right_vertex, edgeLeft,
 					edgeRight);
+		} else {
+			CoverageHandler.update(14);
+		}
 
 		// Usually we work with lines, so process them in the fastest way.
 		// First check - assume segments are far apart. compare x intervals
-		if (edgeLeft.m_env.vmax < edgeRight.m_env.vmin)
+		if (edgeLeft.m_env.vmax < edgeRight.m_env.vmin) {
+			CoverageHandler.update(15);
 			return -1;
-		if (edgeRight.m_env.vmax < edgeLeft.m_env.vmin)
+		} else {
+			CoverageHandler.update(16);
+		}
+		if (edgeRight.m_env.vmax < edgeLeft.m_env.vmin) {
+			CoverageHandler.update(17);
 			return 1;
+		} else {
+			CoverageHandler.update(18);
+		}
 
 		// compare case by case.
 		int kind = edgeLeft.m_b_horizontal ? 1 : 0;
 		kind |= edgeRight.m_b_horizontal ? 2 : 0;
-		if (kind == 0)// both segments are non-horizontal
+		if (kind == 0) { // both segments are non-horizontal
+			CoverageHandler.update(19);
 			return compareNonHorizontal_(edgeLeft, edgeRight);
-		else if (kind == 1) // line_1 horizontal, line_2 is not
+		} else if (kind == 1) { // line_1 horizontal, line_2 is not
+			CoverageHandler.update(20);
 			return compareHorizontal1_(edgeLeft.m_line, edgeRight.m_line);
-		else if (kind == 2) // line_2 horizontal, line_1 is not
+		} else if (kind == 2) { // line_2 horizontal, line_1 is not
+			CoverageHandler.update(21);
 			return compareHorizontal1_(edgeRight.m_line, edgeLeft.m_line) * -1;
-		else
+		} else {
+			CoverageHandler.update(22);
 			// if (kind == 3) //both horizontal
 			return compareHorizontal2_(edgeLeft.m_line, edgeRight.m_line);
+		}
 	}
 
 	@Override

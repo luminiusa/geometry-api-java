@@ -1703,30 +1703,52 @@ class RelationalOperationsMatrix {
 
     private void areaGeomContainsOrDisjointPredicates_(Polygon polygon, int matrix_interior, char c1, int matrix_boundary, char c2)
     {
+		CoverageHandler.setTarget(CoverageHandler.RelationalOperationsMatrix_areaGeomContainsOrDisjointPredicates_);
+		CoverageHandler.update(0);
         if (matrix_interior != -1 || matrix_boundary != -1)
         {
+			CoverageHandler.update(1);
             boolean has_area = ((c1 != 'T' && c1 != 'F' && matrix_interior != -1) || (c2 != 'T' && c2 != 'F' && matrix_boundary != -1) ? polygon.calculateArea2D() != 0 : true);
 
             if (has_area)
             {
-                if (matrix_interior != -1)
+				CoverageHandler.update(2);
+                if (matrix_interior != -1) {
+				  CoverageHandler.update(3);
                   m_matrix[matrix_interior] = 2;
-                if (matrix_boundary != -1)
+				} else {
+				  CoverageHandler.update(4);
+				}
+                if (matrix_boundary != -1) {
+				  CoverageHandler.update(5);
                   m_matrix[matrix_boundary] = 1;
+				} else {
+				  CoverageHandler.update(6);
+				}
             }
             else
             {
-                if (matrix_boundary != -1)
+				CoverageHandler.update(7);
+                if (matrix_boundary != -1) {
+					CoverageHandler.update(8);
                   m_matrix[matrix_boundary] = -1;
+				} else {
+					CoverageHandler.update(9);
+				}
 
                 if (matrix_interior != -1)
                 {
+					CoverageHandler.update(10);
                     Envelope2D env = new Envelope2D();
                     polygon.queryEnvelope2D(env);
                     m_matrix[matrix_interior] = (env.getHeight() == 0.0 && env.getWidth() == 0.0 ? 0 : 1);
-                }
+                } else {
+					CoverageHandler.update(11);
+				}
             }
-        }
+        } else {
+			CoverageHandler.update(12);
+		}
     }
 
 	private void areaAreaContainsPredicates_(Polygon polygon_b) {

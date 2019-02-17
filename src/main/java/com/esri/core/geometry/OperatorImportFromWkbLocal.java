@@ -905,6 +905,8 @@ class OperatorImportFromWkbLocal extends OperatorImportFromWkb {
 
 	private static Geometry importFromWkbMultiPoint(int importFlags,
 			boolean bZs, boolean bMs, WkbHelper wkbHelper) {
+		CoverageHandler.setTarget(CoverageHandler.OperatorImportFromWkbLocal_importFromWkbMultiPoint);
+		CoverageHandler.update(0);
 		int offset = 5; // skip byte order and type
 
 		// set point count
@@ -921,30 +923,50 @@ class OperatorImportFromWkbLocal extends OperatorImportFromWkb {
 		newmultipoint = new MultiPoint();
 		multipoint = (MultiPointImpl) newmultipoint._getImpl();
 
-		if (bZs)
+		if (bZs) {
+			CoverageHandler.update(1);
 			multipoint.addAttribute(VertexDescription.Semantics.Z);
+		} else {
+			CoverageHandler.update(2);
+		}
 
-		if (bMs)
+		if (bMs) {
+			CoverageHandler.update(3);
 			multipoint.addAttribute(VertexDescription.Semantics.M);
+		} else {
+			CoverageHandler.update(4);
+		}
 
 		if (point_count > 0) {
+			CoverageHandler.update(5);
 			position = (AttributeStreamOfDbl) (AttributeStreamBase
 					.createAttributeStreamWithSemantics(
 							VertexDescription.Semantics.POSITION, point_count));
 
-			if (bZs)
+			if (bZs) {
+				CoverageHandler.update(6);
 				zs = (AttributeStreamOfDbl) (AttributeStreamBase
 						.createAttributeStreamWithSemantics(
 								VertexDescription.Semantics.Z, point_count));
+			} else {
+				CoverageHandler.update(7);
+			}
 
-			if (bMs)
+			if (bMs) {
+				CoverageHandler.update(8);
 				ms = (AttributeStreamOfDbl) (AttributeStreamBase
 						.createAttributeStreamWithSemantics(
 								VertexDescription.Semantics.M, point_count));
+			} else {
+				CoverageHandler.update(9);
+			}
+		} else {
+			CoverageHandler.update(10);
 		}
 
 		boolean bCreateMs = false, bCreateZs = false;
 		for (int i = 0; i < point_count; i++) {
+			CoverageHandler.update(11);
 			offset += 5; // skip redundant byte order and type fields
 
 			// read xy coordinates
@@ -957,50 +979,80 @@ class OperatorImportFromWkbLocal extends OperatorImportFromWkb {
 			position.write(2 * i + 1, y);
 
 			if (bZs) {
+				CoverageHandler.update(12);
 				double z = wkbHelper.getDouble(offset);
 				offset += 8;
 
 				zs.write(i, z);
 				if (!VertexDescription.isDefaultValue(
-						VertexDescription.Semantics.Z, z))
+						VertexDescription.Semantics.Z, z)) {
+					CoverageHandler.update(13);
 					bCreateZs = true;
+				} else {
+					CoverageHandler.update(14);
+				}
+			} else {
+				CoverageHandler.update(15);
 			}
 
 			if (bMs) {
+				CoverageHandler.update(16);
 				double m = wkbHelper.getDouble(offset);
 				offset += 8;
 
 				ms.write(i, m);
 				if (!VertexDescription.isDefaultValue(
-						VertexDescription.Semantics.M, m))
+						VertexDescription.Semantics.M, m)) {
+					CoverageHandler.update(17);
 					bCreateMs = true;
+				} else {
+					CoverageHandler.update(18);
+				}
+			} else {
+				CoverageHandler.update(19);
 			}
 		}
 
 		// set envelopes and assign AttributeStreams
 
 		if (point_count > 0) {
+			CoverageHandler.update(20);
 			multipoint.resize(point_count);
 			multipoint.setAttributeStreamRef(
 					VertexDescription.Semantics.POSITION, position);
 
 			if (bZs) {
-				if (!bCreateZs)
+				CoverageHandler.update(21);
+				if (!bCreateZs) {
+					CoverageHandler.update(22);
 					zs = null;
+				} else {
+					CoverageHandler.update(23);
+				}
 
 				multipoint.setAttributeStreamRef(VertexDescription.Semantics.Z,
 						zs);
+			} else {
+				CoverageHandler.update(24);
 			}
 
 			if (bMs) {
-				if (!bCreateMs)
+				if (!bCreateMs) {
+					CoverageHandler.update(25);
 					ms = null;
+				} else {
+					CoverageHandler.update(26);
+				}
 
 				multipoint.setAttributeStreamRef(VertexDescription.Semantics.M,
 						ms);
+			} else {
+				CoverageHandler.update(27);
 			}
 
 			multipoint.notifyModified(MultiPointImpl.DirtyFlags.DirtyAll);
+		} else {
+			CoverageHandler.update(28);
 		}
 
 		wkbHelper.adjustment += offset;

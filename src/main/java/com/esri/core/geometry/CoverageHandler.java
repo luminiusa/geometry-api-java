@@ -11,6 +11,7 @@ public class CoverageHandler {
     public static final boolean[] MultiPathImpl_insertPoints = new boolean[16];
     public static final boolean[] TopologicalOperations_normalizeResult = new boolean[13];
     public static final boolean[] AttributeStreamOfInt16_writeRange = new boolean[15];
+    public static final boolean[] MultiPathImpl_openAllPathsAndDuplicateStartVertex = new boolean[16];
     
     private static boolean[] target = null;
     
@@ -27,10 +28,11 @@ public class CoverageHandler {
     
     private static void log() {
         System.out.println("-----------------------");
-        logHelper("MultiPathImpl::addSegmentsFromPath    ", MultiPathImpl_addSegmentsFromPath);
-        logHelper("MultiPathImpl::insertPoints           ", MultiPathImpl_insertPoints);
-        logHelper("TopologicalOperations::normalizeResult", TopologicalOperations_normalizeResult);
-        logHelper("AttributeStreamOfInt16::writeRange    ", AttributeStreamOfInt16_writeRange);
+        logHelper("MultiPathImpl::addSegmentsFromPath                ", MultiPathImpl_addSegmentsFromPath);
+        logHelper("MultiPathImpl::insertPoints                       ", MultiPathImpl_insertPoints);
+        logHelper("TopologicalOperations::normalizeResult            ", TopologicalOperations_normalizeResult);
+        logHelper("AttributeStreamOfInt16::writeRange                ", AttributeStreamOfInt16_writeRange);
+        logHelper("MultiPathImpl::openAllPathsAndDuplicateStartVertex", MultiPathImpl_openAllPathsAndDuplicateStartVertex);
         System.out.println("-----------------------");        
     }
     

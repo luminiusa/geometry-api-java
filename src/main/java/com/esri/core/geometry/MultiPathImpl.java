@@ -380,27 +380,37 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 	// Reviewed vs. Native Jan 11, 2011
 	// Major Changes on 16th of January
 	public void openAllPathsAndDuplicateStartVertex() {
+		CoverageHandler.setTarget(CoverageHandler.MultiPathImpl_openAllPathsAndDuplicateStartVertex);
+		CoverageHandler.update(0);
 		_touch();
-		if (m_bPolygon)
+		if (m_bPolygon) {
+			CoverageHandler.update(1);
 			throw GeometryException.GeometryInternalError();// do not call this
 															// method on a
 															// polygon
+		}
 
-		if (m_pathFlags == null)// if (!m_pathFlags)
+		if (m_pathFlags == null) {// if (!m_pathFlags)
+			CoverageHandler.update(2);
 			throw GeometryException.GeometryInternalError();
+		}
 
 		_verifyAllStreams();
 
 		int closedPathCount = 0;
 		int pathCount = getPathCount();
 		for (int i = 0; i < pathCount; i++) {
+			CoverageHandler.update(3);
 			if (m_pathFlags.read(i) == (byte) PathFlags.enumClosed) {
+				CoverageHandler.update(4);
 				closedPathCount++;
 			}
 		}
 
 		for (int iattr = 0, nattr = m_description.getAttributeCount(); iattr < nattr; iattr++) {
+			CoverageHandler.update(5);
 			if (m_vertexAttributes[iattr] != null) {
+				CoverageHandler.update(6);
 				int semantics = m_description._getSemanticsImpl(iattr);// int
 																		// semantics
 																		// =
@@ -412,24 +422,31 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 				int offset = closedPathCount;
 				int ipath = pathCount;
 				for (int i = m_pointCount - 1; i >= 0; i--) {
+					CoverageHandler.update(7);
 					if (i + 1 == m_paths.read(ipath)) {
+						CoverageHandler.update(8);
 						ipath--;
 						if (m_pathFlags.read(ipath) == (byte) PathFlags.enumClosed) {
+							CoverageHandler.update(9);
 							int istart = m_paths.read(ipath);
 
 							for (int c = 0; c < comp; c++) {
+								CoverageHandler.update(10);
 								double v = m_vertexAttributes[iattr]
 										.readAsDbl(comp * istart + c);
 								m_vertexAttributes[iattr].writeAsDbl(comp
 										* (offset + i) + c, v);
 							}
 
-							if (--offset == 0)
+							if (--offset == 0) {
+								CoverageHandler.update(11);
 								break;
+							}
 						}
 					}
 
 					for (int c = 0; c < comp; c++) {
+						CoverageHandler.update(12);
 						double v = m_vertexAttributes[iattr].readAsDbl(comp * i
 								+ c);
 						m_vertexAttributes[iattr].writeAsDbl(comp
@@ -441,13 +458,16 @@ final class MultiPathImpl extends MultiVertexGeometryImpl {
 
 		int offset = closedPathCount;
 		for (int ipath = pathCount; ipath > 0; ipath--) {
+			CoverageHandler.update(13);
 			int iend = m_paths.read(ipath);
 			m_paths.write(ipath, iend + offset);
 
 			if (m_pathFlags.read(ipath - 1) == (byte) PathFlags.enumClosed) {
+				CoverageHandler.update(14);
 				m_pathFlags.clearBits(ipath - 1, (byte) PathFlags.enumClosed);
 
 				if (--offset == 0) {
+					CoverageHandler.update(15);
 					break;
 				}
 			}

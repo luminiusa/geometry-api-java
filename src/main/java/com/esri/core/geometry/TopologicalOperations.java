@@ -1534,56 +1534,80 @@ final class TopologicalOperations {
 			if (!geomRes.isEmpty()) {
 				CoverageHandler.update(2);
 				poly.addEnvelope((Envelope) geomRes, false);
+			} else {
+				CoverageHandler.update(3);
 			}
 			return poly;
+		} else {
+			CoverageHandler.update(4);
 		}
 
 		if (gtRes == Geometry.Type.Point && (op == '|' || op == '^')) {
-			CoverageHandler.update(3);
+			CoverageHandler.update(5);
 			MultiPoint poly = new MultiPoint(geomRes.getDescription());
 			if (!geomRes.isEmpty()) {
-				CoverageHandler.update(4);
+				CoverageHandler.update(6);
 				poly.add((Point) geomRes);
+			} else {
+				CoverageHandler.update(7);
 			}
 			return poly;
+		} else {
+			CoverageHandler.update(8);
 		}
 
 		if (gtRes == Geometry.Type.Line) {
-			CoverageHandler.update(5);
+			CoverageHandler.update(9);
 			Polyline poly = new Polyline(geomRes.getDescription());
 			if (!geomRes.isEmpty()) {
-				CoverageHandler.update(6);
+				CoverageHandler.update(10);
 				poly.addSegment((Segment) geomRes, true);
+			} else {
+				CoverageHandler.update(11);
 			}
 			return poly;
+		} else {
+			CoverageHandler.update(12);
 		}
 
 		if (gtRes == Geometry.Type.Point && op == '-') {
-			CoverageHandler.update(7);
+			CoverageHandler.update(13);
 			if (geom_a.getType() == Geometry.Type.Point) {
-				CoverageHandler.update(8);
+				CoverageHandler.update(14);
 				Point pt = new Point(geomRes.getDescription());
 				if (!geomRes.isEmpty()) {
-					CoverageHandler.update(9);
+					CoverageHandler.update(15);
 					assert (((MultiPoint) geomRes).getPointCount() == 1);
 					((MultiPoint) geomRes).getPointByVal(0, pt);
+				} else {
+					CoverageHandler.update(16);
 				}
 				return pt;
+			} else {
+				CoverageHandler.update(17);
 			}
+		} else {
+			CoverageHandler.update(18);
 		}
 
 		if (gtRes == Geometry.Type.MultiPoint && op == '&') {
-			CoverageHandler.update(10);
+			CoverageHandler.update(19);
 			if (geom_a.getType() == Geometry.Type.Point) {
-				CoverageHandler.update(11);
+				CoverageHandler.update(20);
 				Point pt = new Point(geomRes.getDescription());
 				if (!geomRes.isEmpty()) {
-					CoverageHandler.update(12);
+					CoverageHandler.update(21);
 					assert (((MultiPoint) geomRes).getPointCount() == 1);
 					((MultiPoint) geomRes).getPointByVal(0, pt);
+				} else {
+					CoverageHandler.update(22);
 				}
 				return pt;
+			} else {
+				CoverageHandler.update(23);
 			}
+		} else {
+			CoverageHandler.update(24);
 		}
 
 		return geomRes;

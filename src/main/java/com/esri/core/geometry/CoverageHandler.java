@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class CoverageHandler {
-    public static final boolean[] MultiPathImpl_addSegmentsFromPath = new boolean[16];
-    public static final boolean[] MultiPathImpl_insertPoints = new boolean[16];
-    public static final boolean[] TopologicalOperations_normalizeResult = new boolean[13];
-    public static final boolean[] AttributeStreamOfInt16_writeRange = new boolean[15];
-    public static final boolean[] MultiPathImpl_openAllPathsAndDuplicateStartVertex = new boolean[16];
-    public static final boolean[] RasterizedGeometry2DImpl_queryEnvelopeInGeometry = new boolean[14];
+    public static final boolean[] MultiPathImpl_addSegmentsFromPath = new boolean[28];
+    public static final boolean[] MultiPathImpl_insertPoints = new boolean[26];
+    public static final boolean[] TopologicalOperations_normalizeResult = new boolean[25];
+    public static final boolean[] AttributeStreamOfInt16_writeRange = new boolean[21];
+    public static final boolean[] MultiPathImpl_openAllPathsAndDuplicateStartVertex = new boolean[25];
+    public static final boolean[] RasterizedGeometry2DImpl_queryEnvelopeInGeometry = new boolean[23];
     
     private static boolean[] target = null;
     

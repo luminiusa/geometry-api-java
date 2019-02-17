@@ -437,6 +437,8 @@ final class RasterizedGeometry2DImpl extends RasterizedGeometry2D {
 		if (!env.intersect(m_geomEnv)) {
 			CoverageHandler.update(1);
 			return HitType.Outside;
+		} else {
+			CoverageHandler.update(2);
 		}
 		
 		int ixmin = worldToPixX(env.xmin);
@@ -444,25 +446,35 @@ final class RasterizedGeometry2DImpl extends RasterizedGeometry2D {
 		int iymin = worldToPixY(env.ymin);
 		int iymax = worldToPixY(env.ymax);
 		if (ixmin < 0) {
-			CoverageHandler.update(2);
+			CoverageHandler.update(3);
 			ixmin = 0;
+		} else {
+			CoverageHandler.update(4);
 		}
 		if (iymin < 0) {
-			CoverageHandler.update(3);
+			CoverageHandler.update(5);
 			iymin = 0;
+		} else {
+			CoverageHandler.update(6);
 		}
 		if (ixmax >= m_width) {
-			CoverageHandler.update(4);
+			CoverageHandler.update(7);
 			ixmax = m_width - 1;
+		} else {
+			CoverageHandler.update(8);
 		}
 		if (iymax >= m_width) {
-			CoverageHandler.update(5);
+			CoverageHandler.update(9);
 			iymax = m_width - 1;
+		} else {
+			CoverageHandler.update(10);
 		}
 
 		if (ixmin > ixmax || iymin > iymax) {
-			CoverageHandler.update(6);
+			CoverageHandler.update(11);
 			return HitType.Outside;
+		} else {
+			CoverageHandler.update(12);
 		}
 
 		int area = Math.max(ixmax - ixmin, 1) * Math.max(iymax - iymin, 1);
@@ -471,13 +483,13 @@ final class RasterizedGeometry2DImpl extends RasterizedGeometry2D {
 		int width = m_width;
 		int res = 0;
 		while (true) {
-			CoverageHandler.update(7);
+			CoverageHandler.update(13);
 			if (area < 32 || width < 16) {
-				CoverageHandler.update(8);
+				CoverageHandler.update(14);
 				for (int iy = iymin; iy <= iymax; iy++) {
-					CoverageHandler.update(9);
+					CoverageHandler.update(15);
 					for (int ix = ixmin; ix <= ixmax; ix++) {
-						CoverageHandler.update(10);
+						CoverageHandler.update(16);
 						int divix = ix >> 4;
 						int modix = (ix & 15) * 2;
 						res = (m_bitmap[iStart + scanLineSize * iy + divix] >> modix) & 3; // read
@@ -485,19 +497,25 @@ final class RasterizedGeometry2DImpl extends RasterizedGeometry2D {
 						// bit
 						// color.
 						if (res > 1) {
-							CoverageHandler.update(11);
+							CoverageHandler.update(17);
 							return HitType.Border;
+						} else {
+							CoverageHandler.update(18);
 						}
 					}
 				}
 
 				if (res == 0) {
-					CoverageHandler.update(12);
+					CoverageHandler.update(19);
 					return HitType.Outside;
 				} else if (res == 1) {
-					CoverageHandler.update(13);
+					CoverageHandler.update(20);
 					return HitType.Inside;
+				} else {
+					CoverageHandler.update(21);
 				}
+			} else {
+				CoverageHandler.update(22);
 			}
 
 			iStart += scanLineSize * width;

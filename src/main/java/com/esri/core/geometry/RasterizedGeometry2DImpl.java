@@ -432,24 +432,38 @@ final class RasterizedGeometry2DImpl extends RasterizedGeometry2D {
 
 	@Override
 	public HitType queryEnvelopeInGeometry(Envelope2D env) {
-		if (!env.intersect(m_geomEnv))
+		CoverageHandler.setTarget(CoverageHandler.RasterizedGeometry2DImpl_queryEnvelopeInGeometry);
+		CoverageHandler.update(0);
+		if (!env.intersect(m_geomEnv)) {
+			CoverageHandler.update(1);
 			return HitType.Outside;
+		}
 		
 		int ixmin = worldToPixX(env.xmin);
 		int ixmax = worldToPixX(env.xmax);
 		int iymin = worldToPixY(env.ymin);
 		int iymax = worldToPixY(env.ymax);
-		if (ixmin < 0)
+		if (ixmin < 0) {
+			CoverageHandler.update(2);
 			ixmin = 0;
-		if (iymin < 0)
+		}
+		if (iymin < 0) {
+			CoverageHandler.update(3);
 			iymin = 0;
-		if (ixmax >= m_width)
+		}
+		if (ixmax >= m_width) {
+			CoverageHandler.update(4);
 			ixmax = m_width - 1;
-		if (iymax >= m_width)
+		}
+		if (iymax >= m_width) {
+			CoverageHandler.update(5);
 			iymax = m_width - 1;
+		}
 
-		if (ixmin > ixmax || iymin > iymax)
+		if (ixmin > ixmax || iymin > iymax) {
+			CoverageHandler.update(6);
 			return HitType.Outside;
+		}
 
 		int area = Math.max(ixmax - ixmin, 1) * Math.max(iymax - iymin, 1);
 		int iStart = 0;
@@ -457,24 +471,33 @@ final class RasterizedGeometry2DImpl extends RasterizedGeometry2D {
 		int width = m_width;
 		int res = 0;
 		while (true) {
+			CoverageHandler.update(7);
 			if (area < 32 || width < 16) {
+				CoverageHandler.update(8);
 				for (int iy = iymin; iy <= iymax; iy++) {
+					CoverageHandler.update(9);
 					for (int ix = ixmin; ix <= ixmax; ix++) {
+						CoverageHandler.update(10);
 						int divix = ix >> 4;
 						int modix = (ix & 15) * 2;
 						res = (m_bitmap[iStart + scanLineSize * iy + divix] >> modix) & 3; // read
 						// two
 						// bit
 						// color.
-						if (res > 1)
+						if (res > 1) {
+							CoverageHandler.update(11);
 							return HitType.Border;
+						}
 					}
 				}
 
-				if (res == 0)
+				if (res == 0) {
+					CoverageHandler.update(12);
 					return HitType.Outside;
-				else if (res == 1)
+				} else if (res == 1) {
+					CoverageHandler.update(13);
 					return HitType.Inside;
+				}
 			}
 
 			iStart += scanLineSize * width;

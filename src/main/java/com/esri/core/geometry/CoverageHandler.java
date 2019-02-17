@@ -12,6 +12,7 @@ public class CoverageHandler {
     public static final boolean[] TopologicalOperations_normalizeResult = new boolean[13];
     public static final boolean[] AttributeStreamOfInt16_writeRange = new boolean[15];
     public static final boolean[] MultiPathImpl_openAllPathsAndDuplicateStartVertex = new boolean[16];
+    public static final boolean[] RasterizedGeometry2DImpl_queryEnvelopeInGeometry = new boolean[14];
     
     private static boolean[] target = null;
     
@@ -33,6 +34,7 @@ public class CoverageHandler {
         logHelper("TopologicalOperations::normalizeResult            ", TopologicalOperations_normalizeResult);
         logHelper("AttributeStreamOfInt16::writeRange                ", AttributeStreamOfInt16_writeRange);
         logHelper("MultiPathImpl::openAllPathsAndDuplicateStartVertex", MultiPathImpl_openAllPathsAndDuplicateStartVertex);
+        logHelper("RasterizedGeometry2DImpl::queryEnvelopeInGeometry ", RasterizedGeometry2DImpl_queryEnvelopeInGeometry);
         System.out.println("-----------------------");        
     }
     

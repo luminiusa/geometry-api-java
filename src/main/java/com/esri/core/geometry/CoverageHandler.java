@@ -47,10 +47,13 @@ public class CoverageHandler {
     }
     
     private static void logHelper(String s, boolean[] toPrint) {
+        double total = 0;
         System.out.print(s);
         for (boolean b : toPrint) {
             System.out.print(" " + (b ? 1 : 0));
+            total += b ? 1 : 0;
         }
-        System.out.println("");
+        int percentage = (int)(100*(total/toPrint.length) + 0.5);
+        System.out.println(" - " + percentage + "%");
     }
 }

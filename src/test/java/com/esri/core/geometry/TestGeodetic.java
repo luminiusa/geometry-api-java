@@ -29,6 +29,8 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 public class TestGeodetic extends TestCase {
+	private static final double PE_PI2 = 1.57079632679489661923132*180/Math.PI;
+
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -75,6 +77,45 @@ public class TestGeodetic extends TestCase {
 	}
 
 	@Test
+	public void testSamePoints() {
+		Point p1 = new Point(119.13731666666666, PE_PI2);
+		Point p2 = new Point(119.13731666666666, PE_PI2);
+		double d = GeometryEngine.geodesicDistanceOnWGS84(p1, p2);
+		assertTrue(d == 0);
+	}
+
+	@Test
+	public void testOppositeLatitude() {
+
+			Point p1 = new Point(119.13731666666666, PE_PI2);
+			Point p2 = new Point(119.13731666666666, -PE_PI2);
+			double d = GeometryEngine.geodesicDistanceOnWGS84(p1, p2);
+			assertTrue(d == 2.0003931458625443E7);
+	}
+	@Test
+	public void testOppositeLongitude() {
+
+			Point p1 = new Point(PE_PI2, -30);
+			Point p2 = new Point(-PE_PI2, 30);
+			double d = GeometryEngine.geodesicDistanceOnWGS84(p1, p2);
+			assertTrue(d == 2.0003931458625443E7);
+	}
+
+	@Test
+	public void testDistanceOnSphere() {
+		double a = 60.0; // radius of spheroid for WGS_1984
+		double e2 = 0.0; // ellipticity for WGS_1984
+		double rpu = Math.PI / 180.0;
+		PeDouble answer = new PeDouble();
+		Point p1 = new Point(60, 30);
+		Point p2 = new Point(30, 60);
+		GeoDist.geodesic_distance_ngs(a, e2, p1.getX() * rpu,
+				p1.getY() * rpu, p2.getX() * rpu, p2.getY()
+						* rpu, answer, null, null);
+		assertTrue(answer.val == 37.80150789746255);
+	}
+
+	@Test
 	public void testDistanceFailure() {
 		{
 			Point p1 = new Point(-60.668485, -31.996013333333334);
@@ -104,7 +145,7 @@ public class TestGeodetic extends TestCase {
 			assertTrue(Math.abs(d - 19964450.206594173) < 1e-12 * 19964450.206594173);
 		}
 	}
-	
+
 	@Test
 	public void testLengthAccurateCR191313() {
 		/*
@@ -117,7 +158,7 @@ public class TestGeodetic extends TestCase {
 		 * //[6097817.59407673
 		 * ,17463475.2931517],[-1168053.34617516,11199801.3734424
 		 * ]]],"spatialReference":{"wkid":102631}
-		 * 
+		 *
 		 * Polyline polyline = new Polyline();
 		 * polyline.startPath(6097817.59407673, 17463475.2931517);
 		 * polyline.lineTo(-1168053.34617516, 11199801.3734424); double length =
@@ -125,5 +166,5 @@ public class TestGeodetic extends TestCase {
 		 * assertTrue(Math.abs(length - 2738362.3249366437) < 2e-9 * length);
 		 */
 	}
-	
+
 }

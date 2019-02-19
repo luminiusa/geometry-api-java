@@ -29,6 +29,8 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 public class TestGeodetic extends TestCase {
+	private static final double PE_PI2 = 1.57079632679489661923132*180/Math.PI;
+	
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -73,7 +75,46 @@ public class TestGeodetic extends TestCase {
 			assertTrue(Math.abs(length - 5409156.3896271614) < 1e-12 * 5409156.3896271614);
 		}
 	}
-
+	
+	@Test
+	public void testSamePoints() {
+		Point p1 = new Point(119.13731666666666, PE_PI2);
+		Point p2 = new Point(119.13731666666666, PE_PI2);
+		double d = GeometryEngine.geodesicDistanceOnWGS84(p1, p2);
+		assertTrue(d == 0);
+	}
+	
+	@Test
+	public void testOppositePoints() {
+		{
+			Point p1 = new Point(119.13731666666666, PE_PI2);
+			Point p2 = new Point(119.13731666666666, -PE_PI2);
+			double d = GeometryEngine.geodesicDistanceOnWGS84(p1, p2);
+			assertTrue(d == 2.0003931458625443E7);
+		}
+		{
+			Point p1 = new Point(PE_PI2, -30);
+			Point p2 = new Point(-PE_PI2, 30);
+			double d = GeometryEngine.geodesicDistanceOnWGS84(p1, p2);
+			assertTrue(d == 2.0003931458625443E7);
+			
+		}
+	}
+	
+	@Test
+	public void testDistanceOnSphere() {
+		double a = 60.0; // radius of spheroid for WGS_1984
+		double e2 = 0.0; // ellipticity for WGS_1984
+		double rpu = Math.PI / 180.0;
+		PeDouble answer = new PeDouble();
+		Point p1 = new Point(60, 30);
+		Point p2 = new Point(30, 60);
+		GeoDist.geodesic_distance_ngs(a, e2, p1.getX() * rpu,
+				p1.getY() * rpu, p2.getX() * rpu, p2.getY()
+						* rpu, answer, null, null);
+		assertTrue(answer.val == 37.80150789746255);
+	}
+	
 	@Test
 	public void testDistanceFailure() {
 		{
@@ -127,3 +168,5 @@ public class TestGeodetic extends TestCase {
 	}
 	
 }
+
+
